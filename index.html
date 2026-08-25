@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="AI 学堂 - 股宇宙团队 AI 学习课程：大模型基础、Prompt 与上下文工程、RAG、Agent 与 MCP、AI 产品落地">
+<meta name="theme-color" content="#1a2b4a">
+<title>AI 学堂 · 股宇宙团队 AI 课程</title>
+<link rel="icon" href="https://bayshier.github.io/GYZApp/icon_logo.png" type="image/png">
+<style>
+:root { --brand:#1a2b4a; --accent:#d4a644; --bg:#f7f5f0; --card:#ffffff; --text:#2c3e5d; --muted:#7a8aa8; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header { background:linear-gradient(135deg,var(--brand) 0%,#25406e 100%); color:#fff; padding:48px 20px 72px; text-align:center; }
+.header h1 { font-size:28px; letter-spacing:2px; }
+.header .sub { margin-top:10px; font-size:14px; opacity:.85; }
+.header .tag { display:inline-block; margin-top:16px; padding:4px 14px; border:1px solid rgba(212,166,68,.8); color:var(--accent); border-radius:14px; font-size:12px; letter-spacing:1px; }
+.wrap { max-width:920px; margin:-40px auto 0; padding:0 16px 56px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.card { background:var(--card); border-radius:14px; padding:22px 20px 18px; box-shadow:0 4px 18px rgba(26,43,74,.10); text-decoration:none; color:var(--text); display:block; transition:transform .15s, box-shadow .15s; border-top:3px solid var(--accent); }
+.card:hover { transform:translateY(-3px); box-shadow:0 8px 26px rgba(26,43,74,.16); }
+.card .no { font-size:12px; color:var(--accent); font-weight:bold; letter-spacing:1px; }
+.card h2 { font-size:17px; margin:6px 0 8px; color:var(--brand); }
+.card p { font-size:13px; line-height:1.7; color:var(--muted); }
+.card .meta { margin-top:12px; font-size:12px; color:var(--brand); opacity:.75; }
+.banner { margin-top:18px; background:var(--card); border-radius:14px; padding:18px 20px; box-shadow:0 4px 18px rgba(26,43,74,.10); }
+.banner h3 { font-size:15px; color:var(--brand); margin-bottom:8px; }
+.banner p { font-size:13px; line-height:1.8; color:var(--muted); }
+.banner a { color:var(--brand); font-weight:bold; }
+.footer { text-align:center; padding:28px 16px 40px; font-size:12px; color:var(--muted); line-height:2; }
+.footer a { color:var(--brand); text-decoration:none; }
+.credits { font-size:11px; opacity:.8; }
+@media (max-width:600px){ .header h1{font-size:22px;} }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <h1>🤖 AI 学堂</h1>
+    <div class="sub">股宇宙团队 AI 学习课程 · 从大模型原理到产品落地</div>
+    <div class="tag">五讲 · 中文 · 免费开放</div>
+</header>
+
+<main class="wrap">
+    <div class="grid">
+        <a class="card" href="slides/ch1-llm.html">
+            <div class="no">第 1 讲</div>
+            <h2>大模型基础</h2>
+            <p>Token、下一词预测、训练三阶段、温度与幻觉。案例：为什么 AI 会一本正经地编造股票数据。</p>
+            <div class="meta">12 页 · 所有人必修</div>
+        </a>
+        <a class="card" href="slides/ch2-prompt.html">
+            <div class="no">第 2 讲</div>
+            <h2>Prompt 与上下文工程</h2>
+            <p>提示词四要素、少样本示例、让 AI 稳定输出 JSON 行情摘要、上下文窗口、提示词注入防御。</p>
+            <div class="meta">13 页 · 产品与开发</div>
+        </a>
+        <a class="card" href="slides/ch3-rag.html">
+            <div class="no">第 3 讲</div>
+            <h2>RAG 与向量检索</h2>
+            <p>Embedding、分块策略、检索增强生成全链路。案例：用股宇宙知识库 33 篇教程做证券问答。</p>
+            <div class="meta">11 页 · 开发重点</div>
+        </a>
+        <a class="card" href="slides/ch4-agent.html">
+            <div class="no">第 4 讲</div>
+            <h2>Agent 与工具调用</h2>
+            <p>ReAct 循环、工具定义、MCP 协议。案例：团队真实项目 kline-mcp，让 AI 看懂 K 线行情。</p>
+            <div class="meta">12 页 · 开发重点</div>
+        </a>
+        <a class="card" href="slides/ch5-product.html">
+            <div class="no">第 5 讲</div>
+            <h2>AI 产品落地</h2>
+            <p>评测集建设、成本优化、投资建议合规红线、上线检查清单。从 demo 到产品的最后一公里。</p>
+            <div class="meta">13 页 · 所有人必修</div>
+        </a>
+    </div>
+
+    <div class="banner">
+        <h3>🌱 学习路线建议</h3>
+        <p>产品与运营同学：1 → 2 → 5，重点理解能力边界与合规红线。开发同学：1 → 2 → 3 → 4，第 4 讲对应团队
+        kline-mcp 与 android-mcp 两个真实项目。所有岗位：第 1 讲「幻觉」与第 5 讲「投资建议红线」为必修。</p>
+    </div>
+
+    <div class="banner">
+        <h3>📚 延伸阅读</h3>
+        <p>课程体系参考洛小山的《AI 产品从入门到精通》（54 个主题、180+ 页交互幻灯片），进阶学习推荐前往
+        <a href="https://xueai.app" target="_blank" rel="noopener">xueai.app</a>。</p>
+    </div>
+</main>
+
+<footer class="footer">
+    <a href="https://bayshier.github.io/GYZApp/knowledge.html">← 返回股宇宙知识库</a><br>
+    <span class="credits">课程体系参考 <a href="https://github.com/itshen/learn-ai" target="_blank" rel="noopener">itshen/learn-ai</a>（AGPL-3.0，作者洛小山）· 本项目同样以 AGPL-3.0 开源</span><br>
+    作者：<a href="https://bayshier.github.io/GYZApp/easin.html" target="_blank" rel="noopener">Easin</a>
+</footer>
+
+</body>
+</html>

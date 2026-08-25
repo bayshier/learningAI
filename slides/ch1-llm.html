@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#1a2b4a">
+<title>第 1 讲 · 大模型基础 | AI 学堂</title>
+<link rel="icon" href="https://bayshier.github.io/GYZApp/icon_logo.png" type="image/png">
+<style>
+:root { --brand:#1a2b4a; --accent:#d4a644; --bg:#f7f5f0; --text:#2c3e5d; --muted:#7a8aa8; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+.hd { background:var(--brand); color:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.hd a { color:var(--accent); text-decoration:none; font-size:13px; }
+.hd .t { font-size:14px; letter-spacing:1px; opacity:.9; }
+#stage { flex:1; position:relative; overflow:hidden; }
+.slide { display:none; position:absolute; inset:0; padding:4vh 8vw; overflow-y:auto; }
+.slide.on { display:block; }
+.slide h2 { font-size:clamp(20px,3.4vw,30px); color:var(--brand); margin-bottom:3.5vh; border-left:5px solid var(--accent); padding-left:14px; line-height:1.35; }
+.slide p, .slide li { font-size:clamp(14px,1.9vw,18px); line-height:1.9; }
+.slide ul { padding-left:1.4em; }
+.slide li { margin-bottom:1.2vh; }
+.slide b { color:var(--brand); }
+.case { margin-top:3vh; background:#fff; border:1px solid #e5ddc9; border-left:4px solid var(--accent); border-radius:10px; padding:16px 18px; font-size:clamp(13px,1.7vw,16px); line-height:1.85; }
+.case .lbl { color:var(--accent); font-weight:bold; font-size:.85em; letter-spacing:2px; }
+pre { margin-top:2.5vh; background:var(--brand); color:#e8ecf4; border-radius:10px; padding:14px 16px; font-size:clamp(12px,1.5vw,15px); line-height:1.75; overflow-x:auto; font-family:Menlo,Consolas,monospace; }
+.cover { display:none; text-align:center; }
+.cover.on { display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.cover .no { color:var(--accent); letter-spacing:4px; font-size:14px; }
+.cover h1 { font-size:clamp(26px,5vw,44px); color:var(--brand); margin:2vh 0; }
+.cover .sub { font-size:clamp(14px,2vw,19px); color:var(--muted); }
+.ft { flex-shrink:0; padding:8px 16px 12px; }
+.bar { height:4px; background:#e2ddd2; border-radius:2px; overflow:hidden; }
+.bar i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
+.ctl { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.ctl button { background:var(--brand); color:#fff; border:none; border-radius:8px; padding:6px 18px; font-size:14px; cursor:pointer; }
+.ctl button:disabled { opacity:.35; cursor:default; }
+.ctl .num { font-size:13px; color:var(--muted); }
+@media (max-width:600px){ .slide{padding:3vh 6vw;} }
+</style>
+</head>
+<body>
+
+<div class="hd"><a href="../index.html">← 课程目录</a><span class="t">AI 学堂 · 第 1 讲</span><a href="https://bayshier.github.io/GYZApp/knowledge.html">股宇宙知识库</a></div>
+
+<main id="stage">
+
+<section class="slide cover on">
+    <div class="no">AI 学堂 · 第 1 讲</div>
+    <h1>大模型基础</h1>
+    <div class="sub">AI 为什么会一本正经地胡说八道<br>—— Token、训练、温度与幻觉</div>
+</section>
+
+<section class="slide">
+    <h2>大模型在做什么：下一词预测</h2>
+    <p>把大模型想象成一台<b>超大规模的补全机器</b>：给它一段文字，它预测下一个 token 是什么，然后把它接上去，再预测下一个，循环往复。</p>
+    <ul>
+        <li>输入「今天大盘三大指数集体」，它接「上涨」的概率最高</li>
+        <li>输入「贵州茅台的主要产品是」，它接「白酒」</li>
+        <li>它没有「查资料」的动作，每一步都是<b>按语言概率生成</b></li>
+    </ul>
+    <div class="case"><span class="lbl">关键认知</span><br>聪明、流畅、博学，都建立在「预测下一个词」这一个动作上。这个本质决定了它擅长什么、也决定了它会在哪里出错。</div>
+</section>
+
+<section class="slide">
+    <h2>Token：AI 眼中的文字</h2>
+    <p>模型不直接读文字，文字先被切成 <b>token</b>（词元）。一个 token 可能是一个字、半个词、一个标点。</p>
+    <ul>
+        <li>英文约 0.75 个单词 / token，中文约 0.6 个汉字 / token</li>
+        <li>API <b>按 token 计费</b>：输入、输出分开算钱</li>
+        <li>模型能「记住」的对话长度上限，也叫<b>上下文窗口</b>，单位同样是 token</li>
+    </ul>
+    <pre>「股票」 → ["股", "票"]        2 个 token
+"MACD golden cross" → ["MAC","D"," gold","en"," cross"]  5 个 token
+估算：1 万字中文文档 ≈ 1.7 万 token</pre>
+    <div class="case"><span class="lbl">为什么要关心</span><br>成本核算、上下文塞不塞得下、被截断丢信息，全都发生在 token 这一层。</div>
+</section>
+
+<section class="slide">
+    <h2>训练三阶段：从语料到助手</h2>
+    <ul>
+        <li><b>预训练</b>：读遍互联网规模的语料，学会语言与世界知识。贵（千万美元级），知识<b>凝固在训练截止日</b></li>
+        <li><b>SFT 监督微调</b>：用人工编写的高质量问答对，教会模型「以对话方式工作」</li>
+        <li><b>RLHF 人类反馈强化学习</b>：人类对多个回答排序，模型学会「说得让人喜欢」</li>
+    </ul>
+    <div class="case"><span class="lbl">注意</span><br>RLHF 优化的是「讨人喜欢」，不是「更准确」。一个自信流畅的错误答案，比一个磕磕绊绊的正确答案更容易通过人类偏好这关——这是幻觉的温床之一。</div>
+</section>
+
+<section class="slide">
+    <h2>对话的本质：拼接一段文字</h2>
+    <p>你以为在「和一个人聊天」，实际上每次请求都是把<b>系统提示 + 全部历史对话 + 新问题</b>拼成一整段文字，发给一个<b>没有记忆</b>的补全机器。</p>
+    <ul>
+        <li>「它记得我」= 历史被重新拼进去（或做了记忆检索）</li>
+        <li>上下文窗口有限，超长对话的<b>最早内容会被截断</b></li>
+        <li>换个会话/清空缓存，一切归零</li>
+    </ul>
+    <div class="case"><span class="lbl">对产品的意义</span><br>聊天记录是产品的数据资产，不是模型的能力。要做长期记忆，得自己设计存储与检索（第 3、4 讲展开）。</div>
+</section>
+
+<section class="slide">
+    <h2>温度：创造性的旋钮</h2>
+    <ul>
+        <li><b>温度低（接近 0）</b>：总选概率最高的词。输出稳定、保守、可复现</li>
+        <li><b>温度高（接近 1）</b>：按概率抽样，低概率词也有机会。输出多样、有惊喜、也更不稳定</li>
+    </ul>
+    <pre>写行情摘要、抽取 JSON、分类打标  →  temperature = 0
+写营销文案、起名字、闲聊      →  temperature = 0.7 ~ 1.0</pre>
+    <div class="case"><span class="lbl">股宇宙场景</span><br>一切<b>要数字准确、格式稳定</b>的功能（数据摘要、资讯打标、结构化抽取）一律低温度；创意生成才开高温度。</div>
+</section>
+
+<section class="slide">
+    <h2>幻觉：不是 bug，是本性</h2>
+    <p><b>幻觉（Hallucination）</b>：模型生成了流畅、自信、但与现实不符的内容。</p>
+    <ul>
+        <li>它不是在「回忆数据库」，是在<b>按概率补全</b>——概率最高的那个词未必是真的那个</li>
+        <li>训练数据里没有或过时的知识，它宁可编一个合理的，也倾向给出答案（RLHF 教它「要有帮助」，没教它「可以说不知道」）</li>
+        <li>提问方式也会诱导：「给出 2024 年茅台净利润的具体数字」这种问法，等于命令它编</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>案例：问 AI 一个财务数字</h2>
+    <div class="case">
+        <span class="lbl">实测常见结果</span><br>
+        问：贵州茅台 2024 年净利润是多少？<br>
+        答：约 862 亿元（数字看起来非常合理，带单位、带口径，甚至带同比）——但很可能是<b>训练数据里某个年份的数字，或干脆是编的</b>。
+    </div>
+    <ul>
+        <li>数字格式完全正确 ≠ 数字本身正确，<b>流畅度与真实性无关</b></li>
+        <li>模型不知道自己「不知道」，它没有这条知识的可信度标记</li>
+        <li>越具体、越小众的事实，幻觉风险越高（大众常识通常没问题）</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>股宇宙场景的幻觉清单</h2>
+    <ul>
+        <li><b>行情数据</b>：价格、涨跌幅、成交量——必须来自行情接口，<b>永远不让 AI 生成</b></li>
+        <li><b>财务数据</b>：净利润、PE、ROE——同样走接口或已核对的数据库</li>
+        <li><b>科普内容</b>：K 线形态、指标含义这类稳定知识，幻觉风险低，可以放给 AI</li>
+        <li><b>表述规范</b>：AI 参与生成的内容要标注来源；关键数字上线前人工核对</li>
+    </ul>
+    <div class="case"><span class="lbl">一句话原则</span><br><b>事实靠系统，语言靠模型。</b>数字与行情走确定性链路，AI 只负责组织语言，不负责生产事实。</div>
+</section>
+
+<section class="slide">
+    <h2>缓解幻觉的四种武器（预告）</h2>
+    <ul>
+        <li><b>提示词约束</b>：明确允许它说「不知道」，禁止编造来源 → 第 2 讲</li>
+        <li><b>RAG 检索增强</b>：先从股宇宙知识库检索原文，让 AI 只依据资料回答 → 第 3 讲</li>
+        <li><b>工具调用</b>：行情财务数据直接调接口拿真值，绕过生成 → 第 4 讲</li>
+        <li><b>评测与红线</b>：上线前用评测集量化幻觉率，合规红线前置 → 第 5 讲</li>
+    </ul>
+    <p style="margin-top:2vh">没有一种手段能消灭幻觉，工程做法是<b>层层设防</b>：让错误概率低到业务可接受，且错了能被发现。</p>
+</section>
+
+<section class="slide">
+    <h2>本讲小结</h2>
+    <ul>
+        <li>大模型 = 按概率预测下一个 token 的补全机器，一切能力与缺陷源于此</li>
+        <li>token 是成本与上下文的计量单位；训练知识凝固在截止日</li>
+        <li>对话是拼接文字，记忆是产品功能不是模型能力</li>
+        <li>温度控制稳定性：业务功能用低温度</li>
+        <li>幻觉是本性不是故障：事实靠系统，语言靠模型</li>
+    </ul>
+    <div class="case"><span class="lbl">下一讲</span><br>Prompt 与上下文工程：怎么把这台机器调教成可靠的同事。</div>
+</section>
+
+<section class="slide cover">
+    <div class="no">END · 第 1 讲</div>
+    <h1>练一练</h1>
+    <div class="sub" style="text-align:left; max-width:560px; line-height:2.2">
+        1. 向 AI 提一个它不可能知道的小众数字，观察它如何「自信地编」<br>
+        2. 同一个问题分别在温度 0 和 1 下各问 3 次，对比输出差异<br>
+        3. 数一数：一篇 5000 字的研报摘要大约多少 token？成本多少？
+    </div>
+</section>
+
+</main>
+
+<div class="ft">
+    <div class="bar"><i id="bar"></i></div>
+    <div class="ctl">
+        <button id="prev">← 上一页</button>
+        <span class="num" id="num"></span>
+        <button id="next">下一页 →</button>
+    </div>
+</div>
+
+<script>
+(function () {
+    var slides = document.querySelectorAll('.slide');
+    var cur = 0;
+    function show(i) {
+        if (i < 0 || i >= slides.length) { return; }
+        slides[cur].className = slides[cur].className.replace(' on', '');
+        cur = i;
+        slides[cur].className += ' on';
+        document.getElementById('bar').style.width = ((cur + 1) / slides.length * 100) + '%';
+        document.getElementById('num').innerHTML = (cur + 1) + ' / ' + slides.length;
+        document.getElementById('prev').disabled = (cur === 0);
+        document.getElementById('next').disabled = (cur === slides.length - 1);
+    }
+    document.getElementById('prev').onclick = function () { show(cur - 1); };
+    document.getElementById('next').onclick = function () { show(cur + 1); };
+    document.getElementById('stage').addEventListener('click', function (e) {
+        var w = window.innerWidth || document.documentElement.clientWidth;
+        var x = e.clientX || 0;
+        if (x < w * 0.25) { show(cur - 1); } else if (x > w * 0.75) { show(cur + 1); }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.keyCode === 37 || e.keyCode === 33) { show(cur - 1); }
+        if (e.keyCode === 39 || e.keyCode === 34 || e.keyCode === 32) { show(cur + 1); }
+    });
+    show(0);
+})();
+</script>
+
+</body>
+</html>

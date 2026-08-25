@@ -1,0 +1,17 @@
+learningAI · AI 学堂
+Copyright 2026 Easin
+
+本仓库地址：https://github.com/bayshier/learningAI
+
+课程体系与教学结构参考 itshen/learn-ai（AGPL-3.0）：
+https://github.com/itshen/learn-ai
+原作者：洛小山（https://luoxiaoshan.cn，课程站 https://xueai.app）
+
+相对原项目的改动：课件内容为围绕股宇宙产品场景重新编写的原创
+中文教材（大模型基础 / Prompt 与上下文 / RAG / Agent 与 MCP /
+AI 产品落地），幻灯片引擎为独立的纯静态 ES5 实现；未复制原项目
+的课件文本与代码。依照 AGPL-3.0，本仓库同样以 AGPL-3.0 开源，
+并保留原作者署名。
+
+本学堂已融入股宇宙知识库系统（GYZApp）：
+https://github.com/bayshier/GYZApp
